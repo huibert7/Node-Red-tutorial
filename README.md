@@ -81,19 +81,26 @@ La idea es asignar a esos atributos funciones, las cuales serán invocadas cuand
   socket.onmessage = function(event) {
     var message = event.data;
 ... };
-
+```
 Cuando se crea un WebSocket, ninguno de los atributos del objeto tiene valor alguno, por lo que es necesario crearlas si queremos recibir los eventos. Tengan en cuenta que como JavaScript, a diferencia de otros lenguajes como C o Java, no es strongly typed (es decir que no se tiene que definir de antemano el tipo de las variables y que el compilador verifica que no haya errores de confusión de tipos), nada impide que escribamos el siguiente código:
+```
    socket.onmessage = “Hola”;
+```
 Esa línea de código está claramente mal porque el browser espera que el atributo onmessage contenga una función, no una cadena de caracteres. Para evitar problemas, internamente, antes de invocar la función onmessage, el navegador ejecutará un control para verificar que los atributos que deban contener funciones callback realmente contengan funciones. El código ejecutado por el browser internamente probablemente se parezca mucho al código que se muestra a continuación:
+```
+Esa línea de código está claramente mal porque el browser espera que el atributo onmessage contenga una función, no una cadena de caracteres. Para evitar problemas, internamente, antes de invocar la función onmessage, el navegador ejecutará un control para verificar que los atributos que deban contener funciones callback realmente contengan funciones. El código ejecutado por el browser internamente probablemente se parezca mucho al código que se muestra a continuación:
+```
+Esa línea de código está claramente mal porque el browser espera que el atributo onmessage contenga una función, no una cadena de caracteres. Para evitar problemas, internamente, antes de invocar la función onmessage, el navegador ejecutará un control para verificar que los atributos que deban contener funciones callback realmente contengan funciones. El código ejecutado por el browser internamente probablemente se parezca mucho al código que se muestra a continuación:
+``
    if (typeof socket.onmessage === "function") {
       // Podemos invocar la función porque hemos comprobado que el atributo
       // onmessage realmente contiene una función
       socket.onmessage(evento);
    }
-
- Trabajo preliminar
+```
+## Trabajo preliminar
 Si lo desea, puede omitir esta sección, ya que todo el trabajo preliminar ya ha sido realizado para usted por IBM. Sin embargo, esta información puede ser interesante si dese ejecutar posteriormente el ejercicio con su propia cuenta de IBM Cloud.
-Creación de una cuenta en IBM Cloud
+### Creación de una cuenta en IBM Cloud
 Para empezar a desarrollar su primer proyecto sobre IBM Cloud conéctese a http:// cloud.ibm.com/login
  Antes de empezar, regístrese en IBM Cloud
 Si aún no tiene un ID de IBM, como parte del proceso de registro deberá uno, el cual le servirá para poder acceder a su cuenta de IBM Cloud. Además de ser un requisito para poder usar la plataforma PaaS, tener un ID de IBM le permitirá realizar otras operaciones en el sitio web de IBM como por ejemplo obtener white papers, descargar software de evaluación de IBM o participar en los foros de discusión de IBM developerWorks (http://www.ibm.com/ developerworks), un sitio web que es una mina de oro para desarrolladores.
