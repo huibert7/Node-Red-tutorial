@@ -80,16 +80,15 @@ La idea es asignar a esos atributos funciones, las cuales serán invocadas cuand
  // Gestión de la recepción de mensajes mandados por el servidor.
   socket.onmessage = function(event) {
     var message = event.data;
-... };
+    ...
+  };
 ```
 Cuando se crea un WebSocket, ninguno de los atributos del objeto tiene valor alguno, por lo que es necesario crearlas si queremos recibir los eventos. Tengan en cuenta que como JavaScript, a diferencia de otros lenguajes como C o Java, no es strongly typed (es decir que no se tiene que definir de antemano el tipo de las variables y que el compilador verifica que no haya errores de confusión de tipos), nada impide que escribamos el siguiente código:
 ```
    socket.onmessage = “Hola”;
 ```
 Esa línea de código está claramente mal porque el browser espera que el atributo onmessage contenga una función, no una cadena de caracteres. Para evitar problemas, internamente, antes de invocar la función onmessage, el navegador ejecutará un control para verificar que los atributos que deban contener funciones callback realmente contengan funciones. El código ejecutado por el browser internamente probablemente se parezca mucho al código que se muestra a continuación:
-```
-Esa línea de código está claramente mal porque el browser espera que el atributo onmessage contenga una función, no una cadena de caracteres. Para evitar problemas, internamente, antes de invocar la función onmessage, el navegador ejecutará un control para verificar que los atributos que deban contener funciones callback realmente contengan funciones. El código ejecutado por el browser internamente probablemente se parezca mucho al código que se muestra a continuación:
-```
+
 Esa línea de código está claramente mal porque el browser espera que el atributo onmessage contenga una función, no una cadena de caracteres. Para evitar problemas, internamente, antes de invocar la función onmessage, el navegador ejecutará un control para verificar que los atributos que deban contener funciones callback realmente contengan funciones. El código ejecutado por el browser internamente probablemente se parezca mucho al código que se muestra a continuación:
 ``
    if (typeof socket.onmessage === "function") {
