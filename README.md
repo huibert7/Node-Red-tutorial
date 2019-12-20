@@ -42,6 +42,7 @@ El primer paso consiste en crear el WebSocket, normalmente al terminar de cargar
       var socket = new WebSocket(‘ws://www.example.com/socketserver');
 ```
 Podrá observar que lo único que necesitamos pasar como argumento es el url al que nos vamos a conectar. Cuando trabajemos en nuestro ejemplo sobre Bluemix, el url se dividirá en dos partes, el url de nuestro servidor (por ejemplo “Node-RED-prueba1.mybluemix.net”) y la ruta que definiremos para el websocket (por ejemplo “/ws/misocket”).
+
 Por motivos de seguridad, la especificación obliga que los navegadores solo puedan abrir un websocket. La idea es evitar posibles ataques de tipo DoS (Negación de Servicio) desde un browser. A pesar de ello, no todos los navegadores han implementado esta limitación. Sin embargo, es importante conocerla, porque de otra manera podría resultar incomprensible porqué un determinado programa funciona en un browser y en otro no. Otra consideración a tomar en cuenta es que si una página web se accesa usando el protocolo HTTPS, deberá usar forzosamente el protocolo wss para conectarse con el servidor. Esto es lógico porque no tiene sentido tener páginas seguras, con elementos inseguros, pero vale la pena recalcarlo.
 A menos de que nuestra página solo esté buscando recibir mensajes del servidor, en algún momento tendremos que mandar información al servidor usando la función send, tal y como se muestra a continuación:
 ```
@@ -51,27 +52,36 @@ En nuestro ejemplo, mandaremos una cadena de caracteres al servidor. Sin embargo
 ```
       var mensaje = {
             nombre: “Juan”,
-            apellido: “Arbeloa”,
-edad: 27 };
+            apellido: “Arbeloa”, edad: 27 };
       socket.send(JSON.stringify(mensaje));
 ```
 A efectos prácticos, este ejemplo es similar al anterior, porque en realidad también estamos mandando una cadena de caracteres, solo que en este caso, esa cadena representa un objeto JSON que puede ser convertido de nuevo a un objeto JavaScript muy fácilmente en su punto de destino tal y como veremos más adelante.
+
 Finalmente, es posible que en algún momento desee cerrar la conexión hacia el servidor, lo cual se hace de forma lógica, tal y como se muestra a continuación:
+```
       socket.close();
+```
 Si la página web no cierra el websocket de forma explícita, no pasa nada, porque cuando el usuario se mueva a otra página, el servidor detectará automáticamente que el cliente ya no está conectado y cerrará la conexión. Esto es algo que es responsabilidad exclusiva del servidor, el cual debe estar comprobando a intervalos constantes que los clientes siguen conectados. Afortunadamente, eso es algo que hace por nosotros NODE-Red de forma automática, lo que simplifica el problema de forma significativa.
-Callbacks para manejar los eventos
+
+### Callbacks para manejar los eventos
 Los WebSockets funcionan de forma asíncrona. Esto significa que una aplicación nunca se quedará bloqueada en una línea de código esperando a que le llegue un mensaje del servidor. En lugar de eso, será el navegador el que nos avise cuando llegue un mensaje, invocando una función callback en la cual nosotros podremos procesarlo. Esto es importante porque permite evitar que la página web deje de responder a las interacciones con el usuario mientras se interactúa con el servidor.
 
- En JavaScript, las funciones son objetos. Esto significa que son del tipo Object y que es posible asignar a una variable una función, como si de cualquier otro tipo de objeto se tratara. De hecho, las funciones no solo pueden ser almacenadas en variables, sino que además, pueden pasarse como argumento a una función o ser devueltas como resultado de la invocación de una función. Esta característica interesantísima de JavaScript, es la que se explota para implementar las funciones de callback que invocará el navegador cuando un WebSocket reciba un evento.
+En JavaScript, las funciones son objetos. Esto significa que son del tipo Object y que es posible asignar a una variable una función, como si de cualquier otro tipo de objeto se tratara. De hecho, las funciones no solo pueden ser almacenadas en variables, sino que además, pueden pasarse como argumento a una función o ser devueltas como resultado de la invocación de una función. Esta característica interesantísima de JavaScript, es la que se explota para implementar las funciones de callback que invocará el navegador cuando un WebSocket reciba un evento.
+
 El objeto WebSocket tiene las siguientes propiedades:
-• onmessage • onopen
-• onclose
-• onerror
+
+* onmessage
+* onopen
+* onclose
+* onerror
+
 La idea es asignar a esos atributos funciones, las cuales serán invocadas cuando se produzcan los eventos que queremos detectar. En el siguiente ejemplo, asignamos al atributo onmessage una función anónima (se le llama de esta manera porque, como pueden observar, no tiene nombre).
+```
  // Gestión de la recepción de mensajes mandados por el servidor.
   socket.onmessage = function(event) {
     var message = event.data;
 ... };
+
 Cuando se crea un WebSocket, ninguno de los atributos del objeto tiene valor alguno, por lo que es necesario crearlas si queremos recibir los eventos. Tengan en cuenta que como JavaScript, a diferencia de otros lenguajes como C o Java, no es strongly typed (es decir que no se tiene que definir de antemano el tipo de las variables y que el compilador verifica que no haya errores de confusión de tipos), nada impide que escribamos el siguiente código:
    socket.onmessage = “Hola”;
 Esa línea de código está claramente mal porque el browser espera que el atributo onmessage contenga una función, no una cadena de caracteres. Para evitar problemas, internamente, antes de invocar la función onmessage, el navegador ejecutará un control para verificar que los atributos que deban contener funciones callback realmente contengan funciones. El código ejecutado por el browser internamente probablemente se parezca mucho al código que se muestra a continuación:
