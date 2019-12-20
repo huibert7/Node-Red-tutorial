@@ -88,9 +88,7 @@ Cuando se crea un WebSocket, ninguno de los atributos del objeto tiene valor alg
    socket.onmessage = “Hola”;
 ```
 Esa línea de código está claramente mal porque el browser espera que el atributo onmessage contenga una función, no una cadena de caracteres. Para evitar problemas, internamente, antes de invocar la función onmessage, el navegador ejecutará un control para verificar que los atributos que deban contener funciones callback realmente contengan funciones. El código ejecutado por el browser internamente probablemente se parezca mucho al código que se muestra a continuación:
-
-Esa línea de código está claramente mal porque el browser espera que el atributo onmessage contenga una función, no una cadena de caracteres. Para evitar problemas, internamente, antes de invocar la función onmessage, el navegador ejecutará un control para verificar que los atributos que deban contener funciones callback realmente contengan funciones. El código ejecutado por el browser internamente probablemente se parezca mucho al código que se muestra a continuación:
-``
+```
    if (typeof socket.onmessage === "function") {
       // Podemos invocar la función porque hemos comprobado que el atributo
       // onmessage realmente contiene una función
@@ -101,29 +99,37 @@ Esa línea de código está claramente mal porque el browser espera que el atrib
 Si lo desea, puede omitir esta sección, ya que todo el trabajo preliminar ya ha sido realizado para usted por IBM. Sin embargo, esta información puede ser interesante si dese ejecutar posteriormente el ejercicio con su propia cuenta de IBM Cloud.
 ### Creación de una cuenta en IBM Cloud
 Para empezar a desarrollar su primer proyecto sobre IBM Cloud conéctese a http:// cloud.ibm.com/login
- Antes de empezar, regístrese en IBM Cloud
-Si aún no tiene un ID de IBM, como parte del proceso de registro deberá uno, el cual le servirá para poder acceder a su cuenta de IBM Cloud. Además de ser un requisito para poder usar la plataforma PaaS, tener un ID de IBM le permitirá realizar otras operaciones en el sitio web de IBM como por ejemplo obtener white papers, descargar software de evaluación de IBM o participar en los foros de discusión de IBM developerWorks (http://www.ibm.com/ developerworks), un sitio web que es una mina de oro para desarrolladores.
+
+Si aún no tiene un ID de IBM, como parte del proceso de registro deberá obtener uno, el cual le servirá para poder acceder a su cuenta de IBM Cloud. Además de ser un requisito para poder usar la plataforma PaaS, tener un ID de IBM le permitirá realizar otras operaciones en el sitio web de IBM como por ejemplo obtener white papers, descargar software de evaluación de IBM o participar en los foros de discusión de IBM developerWorks (http://www.ibm.com/ developerworks), un sitio web que es una mina de oro para desarrolladores.
+
 Si ya tiene un ID de IBM, puede usarlo para solicitar su cuenta de evaluación y una vez completado el proceso podrá usar el servicio con el ID de IBM que ya tenía.
+
 Para obtener su ID de IBM, pulse el botón
    
- A continuación le aparecerá la siguiente forma, la cual deberá rellenar para poder obtener su ID de IBM y poder empezar a trabajar.
- Primero rellene los datos de su correo electrónico y valídelo. Posteriormente rellene los datos de la forma y pulse el botón
+A continuación le aparecerá la siguiente forma, la cual deberá rellenar para poder obtener su ID de IBM y poder empezar a trabajar.
+
+Primero rellene los datos de su correo electrónico y valídelo. Posteriormente rellene los datos de la forma y pulse el botón
+
 A continuación, IBM le mandará un correo electrónico a la dirección que proporcionó. Lea el correo y siga las instrucciones para terminar el proceso de registro. Ya está listo para empezar a usar la plataforma PaaS de IBM.
-Activación de los servicios que usará nuestra aplicación
+
+## Activación de los servicios que usará nuestra aplicación
 Nuestra aplicación será muy sencilla y solo usará dos servicios. Por un lado necesitaremos el servicio de traducción y por otro lado usaremos Node-RED para crear el web-socket que invocará el servicio de traducción cuando lo solicite el usuario.
-Activación del servicio de traducción de Watson
+### Activación del servicio de traducción de Watson
+
 El servicio de traducción de Watson, al igual que todos los demás, está disponible en el catálogo de servicios de IBM Cloud, el cual se muestra a continuación.
  
-  Seleccione la sección de AI (Inteligencia artificial para encontrar el servicio de traducción de Watson.
- Ahora pulse el botón de Language Translator.
+Seleccione la sección de AI (Inteligencia artificial para encontrar el servicio de traducción de Watson.
+Ahora pulse el botón de Language Translator.
 
- En la siguiente pantalla se muestra información adicional del servicio que usaremos.
-  Simplemente pulse el botón
+En la siguiente pantalla se muestra información adicional del servicio que usaremos.
+Simplemente pulse el botón
 Una vez creado el servicio, la página le muestra información acerca de cómo usar el servicio.
  
- Si hace click sobre la pestaña “Credencials” podrá obtener información acerca de los parámetros que necesitará para pode enfocar el servicio de forma segura sin que ningún otro cliente de IBM Cloud pueda usarlo.
+Si hace click sobre la pestaña “Credencials” podrá obtener información acerca de los parámetros que necesitará para pode enfocar el servicio de forma segura sin que ningún otro cliente de IBM Cloud pueda usarlo.
+
 Anote el API Key porque lo necesitará más adelante en el ejercicio.
-Activación del servicio de Node-RED
+
+### Activación del servicio de Node-RED
 Tal y como ya mencionamos anteriormente, usaremos Node-RED para crear el flujo aflictivo en el servidor. Para poder crear el servicio de Node-RED, debemos regresar al catálogo de servicios de IBM Cloud y seleccionar la pestaña Starter Kit, tal y como se muestra a continuación.
   
  Pulse el botón Node-RED Starter para iniciar la activación del servicio.
@@ -139,54 +145,75 @@ Como se trata de un ejercicio que pretendemos ejecutar en menos de 45 minutos, v
 Ignore la siguiente pantalla y simplemente pulse el botón “Next” para continuar.
 Ya casi terminamos. En la siguiente pantalla simplemente pulse el botón “Finish” para terminar de configurar el ambiente y arrancar la instancia. Cuando aparezca la siguiente pantalla, habremos completado el proceso de configuración y estaremos listos para empezar.
   
- Desarrollo de la aplicación con Node-RED Conectarse a IBM Cloud
+## Desarrollo de la aplicación con Node-RED
+
+### Conectarse a IBM Cloud
 Para empezar a desarrollar su primer proyecto sobre IBM Cloud conéctese a http://
 cloud.ibm.com/login e introduzca el IBM ID que creó o que se le proporcionó. Pulse el botón “Continue” y luego proporcione la clave de acceso.
+
 Si sus datos son correctos, el sistema le dará al acceso a su tablero de control (“Dashboard” en inglés), en el cual se muestra de forma resumida la información de su ambiente PaaS.
     
- Como podrá observar, ya tiene dos servicios activados, los cuales fueron creados previamente (un ambiente de desarrollo con Node-RED y el servicio de traducción de Watson que usaremos más adelante).
-Haga click sobre “View Resources”.
-Ahora haga click sobre la liga correspondiente a su aplicación dentro del apartado “Cloud Foundry Apps”.
-  Esto le lleva a una página en la que puede ver el estatus de su aplicación. En este momento debe tener una sola instancia funcionando, la cual tiene asignada 256MB de memoria.
+Como podrá observar, ya tiene dos servicios activados, los cuales fueron creados previamente (un ambiente de desarrollo con Node-RED y el servicio de traducción de Watson que usaremos más adelante).
 
-  Al tratarse de una cuenta de evaluación, sin costo, la cantidad de memoria que puede tener la instancia está limitada. Sin embargo, para ambientes productivos es posible contratar entornos mucho más grandes.
+Haga click sobre “View Resources”.
+
+Ahora haga click sobre la liga correspondiente a su aplicación dentro del apartado “Cloud Foundry Apps”.
+
+Esto le lleva a una página en la que puede ver el estatus de su aplicación. En este momento debe tener una sola instancia funcionando, la cual tiene asignada 256MB de memoria.
+
+Al tratarse de una cuenta de evaluación, sin costo, la cantidad de memoria que puede tener la instancia está limitada. Sin embargo, para ambientes productivos es posible contratar entornos mucho más grandes.
+
 Para acceder al entorno de desarrollo Node-RED pulse el triángulo situado dentro del botón “Routes” para que aparezca el siguiente menú:
+
 Haga click sobre el URL (en este caso MiTraductor.mybluemix.net, pero en su caso depende
 del nombre que le haya puesto a la aplicación). Esto le llevará a la página de Node-RED. Pulse el siguiente botón para empezar a desarrollar:
    
- Desarrollo del flujo en Node-RED
+### Desarrollo del flujo en Node-RED
 Node-RED es un entorno de programación visual que corre sobre Node.js. Con Node-RED vamos a construir flujos que reciben una entrada y depositan el resultado en una salida. En nuestro caso, lo que vamos a hacer es un flujo que reciba el texto en un idioma cualquiera , que reconozca en qué idioma fue escrito y si Watson sabe traducirlo al inglés, devuelva el texto en ese idioma como salida.
+
 La comunicación entre el navegador y el servidor se hará mediante el uso de web-sockets y usaremos JSON para codificar los datos que intercambiemos.
-Construcción del flujo
+
+### Construcción del flujo
 Si siguió las instrucciones previas, en este momento su pantalla debe mostrar algo muy similar a lo que se aprecia en la siguiente imagen:
+
 El flujo se construye deslizando nodos de la paleta situada del lado izquierdo de la pantalla al espacio vacío en el centro cuyo tab tiene el nombre “Flow 1”.
+
 Sabemos que nuestro flujo va a recibir el texto a traducir a través de un websocket. Por lo tanto vamos a empezar a diseñar nuestro flujo arrastrando un websocket de la sección “input”.
   
- Tengan cuidado porque hay otro websocket en la sección “output” que es diferente y que usaremos más adelante.
+Tengan cuidado porque hay otro websocket en la sección “output” que es diferente y que usaremos más adelante.
 Es necesario configurar el websocket, por lo que simplemente hacemos doble-click sobre el ícono para editar la configuración.
- El tipo de websocket definido por defecto (“Listen on”) es correcto, por lo que no es necesario cambiarlo.
+
+El tipo de websocket definido por defecto (“Listen on”) es correcto, por lo que no es necesario cambiarlo.
 Lo que sí debemos definir es la ruta (path en inglés) en la que estará escuchando nuestro websocket. Para ello es necesario pulsar el botón con el ícono en forma de lápiz:
+
 Esto nos abre una nueva ventana en la que podemos definir la ruta en la que estará escuchando nuestro WebSocket. Por defecto vemos que la ruta usada es /ws/example. Sin embargo es muy fácil cambiarlo por la ruta que más le guste.
+
 Para este ejercicio decidí usar la ruta /ws/misocket, por lo que le sugiero que haga lo mismo para poder seguir las instrucciones. Esto significa que, en mi caso, para conectarme a este websocket deberé usar el siguiente URL, ws://mitraductor.mybluemix.net/ws/misocket.
  
-  Para continuar, pulse el botón “Add”.
+Para continuar, pulse el botón “Add”.
 Ahora ya solo falta ponerle un nombre a este nodo para facilitar la lectura del flujo. En mi caso decidí llamarlo “inputsocket”.
+
 Pulse el botón “Done” para continuar”.
 Como nuestro flujo tan solo tiene un nodo, aún no hace, así que continuemos agregando más nodos. Sabemos que la respuesta de nuestro flujo se entregará a través de un websocket. Por lo tanto, podemos arrastrar un websocket de tipo “output” a nuestro espacio de trabajo.
    
-  Este websocket también se necesita configurar. Utilizando el mismo procedimiento que el que usamos para el websocket de entrada, modifique los campos tal y como se indica en la siguiente pantalla.
+Este websocket también se necesita configurar. Utilizando el mismo procedimiento que el que usamos para el websocket de entrada, modifique los campos tal y como se indica en la siguiente pantalla.
+
 En este caso la configuración será más sencilla, porque vamos a reutilizar la misma ruta que la que usamos para el websocket de entrada. Esto es normal, dado que en realidad estamos hablando de un solo WebSocket, el cual se va a usar tanto para recibir mensajes como para mandar la contestación al browser. Elija un nombre para este nodo (yo decidí llamarlo “outputsocket”). Pulse el botón “Done” para continuar”.
+
 En este momento, en su espacio de trabajo deben aparecer dos nodos, tal y como se muestra a continuación.
    
- En nuestro flujo, lo primero que debemos hacer tras recibir el mensaje es identificar el idioma en el que fue escrito. Para ello vamos a usar el nodo “language identifify" que se encuentra dentro del grupo “IBM Watson” en la paleta de nodos. Arrastre el nodo desde la paleta y colóquelo entre los dos websockets que ya ha configurado.
+En nuestro flujo, lo primero que debemos hacer tras recibir el mensaje es identificar el idioma en el que fue escrito. Para ello vamos a usar el nodo “language identifify" que se encuentra dentro del grupo “IBM Watson” en la paleta de nodos. Arrastre el nodo desde la paleta y colóquelo entre los dos websockets que ya ha configurado.
 Conecte el nodo “inputsocket” con el nodo “language identity”. Haga doble click sobre el segundo nodo para configurarlo. Vamos a hacer dos cosas. Vamos a cambiar el nombre del nodo a “idioma” y vamos a proporcionar las credenciales que Node-RED necesita para poder invocar el servicio.
 Los campos Username y Password se deben rellenar con el usuario y password que usan para conectarse a IBM Cloud. El API Key es un poco más difícil de obtener. En su navegador regrese a la página que muestra su tablero de control.
    
- Haga click sobre “Services” dentro de la tarjeta “Resource summary”.En la siguiente página se muestra una lista de recursos.
-Haga click sobre el servicio cuyo nombre empieza por “Language Translator-“. Eso lo lleva a una página en la que se muestra el API Key y el URL del servicio de traducción. Como la clave está oculta por cuestiones de seguridad, debe pulsar “show credentials” para poder verla y copiarla.
+Haga click sobre “Services” dentro de la tarjeta “Resource summary”.En la siguiente página se muestra una lista de recursos.
+
+Haga click sobre el servicio cuyo nombre empieza por “Language Translator-“. Eso lo lleva a una página en la que se muestra el 
+API Key y el URL del servicio de traducción. Como la clave está oculta por cuestiones de seguridad, debe pulsar “show credentials” para poder verla y copiarla.
+
 Con esta información ya puede completar la información requerida. Pulse el botón “Done” para terminar de configurar el nodo “idioma” y poder continuar.
    
- Ahora ya tenemos los dos primeros nodos de nuestro flujo configurados y conectados.
+Ahora ya tenemos los dos primeros nodos de nuestro flujo configurados y conectados.
 Cuando un websocket recibe un mensaje, automáticamente crea una variable JavaScript llamada msg y guarda el cuerpo del mensaje (en nuestro caso una cadena de caracteres) en el atributo payload de esa misma variable.
 El nodo de detección de idioma funciona de forma muy sencilla, analiza el texto que le llega en msg.payload y regresa el resultado (bajo la forma de un código de idioma, como por ejemplo “en-US”) en msg.lang.language. Como la detección de idiomas no es una ciencia exacta, especialmente con mensajes cortos, también nos provee el porcentaje de probabilidad de que el resultado sea correcto en msg.lang.confidence.
 El nodo de detección de idiomas no altera de forma alguna el contenido de msg.payload, por lo que este valor puede ser utilizado por el siguiente nodo. Sin embargo, no podemos confiar en que todos los nodos siempre preservarán los atributos de la variable msg. Por ejemplo, el nodo de traducción automática recibe el texto a traducir en msg.payload y lo reemplaza por la versión traducida. Eso significa que si quisiéramos conservar el texto original, deberíamos conservarlo en otro atributo de la variable msg que sepamos que no será alterado posteriormente por el flujo. Como en este caso no tenemos interés en preservar el mensaje original, el problema es más sencillo y no tenemos de qué preocuparnos.
@@ -211,14 +238,18 @@ Nuestro flujo está completo. Para poder probarlo, primero es necesario ponerlo 
 En principio, tras unos pocos segundos, en su browser debería aparecer el mensaje “Successfully Deployed” (Publicado exitosamente).
 Ya podemos conectarnos al WebSocket desde cualquier página web. Sin embargo, para ello necesitamos crear primero una página HTML, lo cual es exactamente lo que haremos en la siguiente sección. 
   
- Desarrollo de la aplicación web
-La aplicación web se dividirá en tres archivos: • WebSockets.html
-• WebSockets.js
-• style.css
+## Desarrollo de la aplicación web
+La aplicación web se dividirá en tres archivos:
+* WebSockets.html
+* WebSockets.js
+* style.css
+
 El instructor debe haberle entregado un archivo comprimido que contiene los tres archivos.
 Descomprima el archivo .zip.
+
 El archivo WebSockets.html
 Este es el contenido del archivo HTML. Se trata de un documento muy sencillo, dado que no contiene nada de JavaScript (el código está en el archivo WebSockets.js) y toda la información referente al diseño está en el archivo style.css.
+```
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -240,6 +271,7 @@ aqu&iacute;..." required></textarea>
       <script src="appTest.js"></script>
 </body>
 </html>
+
 Como podrá observar, esta página web realmente solo contiene una lista en la que mostraremos el mensaje enviado al servidor así como la respuesta que recibamos y una forma que usaremos para capturar el mensaje junto con el botón que presionará el usuario para mandarlo.
 El archivo WebSockets.js
 Este archivo contiene el código JavaScript que le da la inteligencia a nuestra página HTML. Si observa el código, verá que solo definimos una función, la cual se ejecutará cuando se termine de cargar la página HTML. En ella se crea el WebSocket y se definen todas las funciones callback que invocará el navegador cuando se produzcan eventos relacionados con ese objeto, como el establecimiento de la conexión, la recepción de un mensaje, etc.
