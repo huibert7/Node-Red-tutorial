@@ -42,17 +42,19 @@ El primer paso consiste en crear el WebSocket, normalmente al terminar de cargar
       var socket = new WebSocket(‘ws://www.example.com/socketserver');
 ```
 Podrá observar que lo único que necesitamos pasar como argumento es el url al que nos vamos a conectar. Cuando trabajemos en nuestro ejemplo sobre Bluemix, el url se dividirá en dos partes, el url de nuestro servidor (por ejemplo “Node-RED-prueba1.mybluemix.net”) y la ruta que definiremos para el websocket (por ejemplo “/ws/misocket”).
-Por motivos de seguridad, la especificación obliga que los navegadores solo puedan abrir un websocket. La idea es evitar posibles ataques de tipo DoS (Negación de Servicio) desde un browser. A pesar de ello, no todos los navegadores han implementado esta limitación. Sin
-  
- embargo, es importante conocerla, porque de otra manera podría resultar incomprensible porqué un determinado programa funciona en un browser y en otro no. Otra consideración a tomar en cuenta es que si una página web se accesa usando el protocolo HTTPS, deberá usar forzosamente el protocolo wss para conectarse con el servidor. Esto es lógico porque no tiene sentido tener páginas seguras, con elementos inseguros, pero vale la pena recalcarlo.
+Por motivos de seguridad, la especificación obliga que los navegadores solo puedan abrir un websocket. La idea es evitar posibles ataques de tipo DoS (Negación de Servicio) desde un browser. A pesar de ello, no todos los navegadores han implementado esta limitación. Sin embargo, es importante conocerla, porque de otra manera podría resultar incomprensible porqué un determinado programa funciona en un browser y en otro no. Otra consideración a tomar en cuenta es que si una página web se accesa usando el protocolo HTTPS, deberá usar forzosamente el protocolo wss para conectarse con el servidor. Esto es lógico porque no tiene sentido tener páginas seguras, con elementos inseguros, pero vale la pena recalcarlo.
 A menos de que nuestra página solo esté buscando recibir mensajes del servidor, en algún momento tendremos que mandar información al servidor usando la función send, tal y como se muestra a continuación:
+```
       socket.send(”Esta es una prueba”);
+```
 En nuestro ejemplo, mandaremos una cadena de caracteres al servidor. Sin embargo, utilizando tan solo un poco de JavaScript podemos intercambiar datos en formato JSON con el servidor, de forma muy natural. Veamos un ejemplo:
+```
       var mensaje = {
             nombre: “Juan”,
             apellido: “Arbeloa”,
 edad: 27 };
       socket.send(JSON.stringify(mensaje));
+```
 A efectos prácticos, este ejemplo es similar al anterior, porque en realidad también estamos mandando una cadena de caracteres, solo que en este caso, esa cadena representa un objeto JSON que puede ser convertido de nuevo a un objeto JavaScript muy fácilmente en su punto de destino tal y como veremos más adelante.
 Finalmente, es posible que en algún momento desee cerrar la conexión hacia el servidor, lo cual se hace de forma lógica, tal y como se muestra a continuación:
       socket.close();
