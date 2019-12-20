@@ -26,19 +26,21 @@ Sin embargo, a pesar de todas sus virtudes, la función XMLHttpRequest tiene una
 Se trata de un concepto muy similar al de los sockets TCP/IP y que permite que una aplicación web establezca un canal de comunicación bi-direccional persistente entre la capa de presentación HTML en el browser y el servidor. Los WebSockets utilizan los puertos estándar de http y https (80 y 443 respectivamente) y la especificación fue diseñada para evitar problemas causados por el uso de proxies y de firewalls. Es importante recalcar que aunque los WebSockets usan el puerto 80 al igual que HTTP, usan un protocolo de comunicación distinto, razón por la cual se usa ws:// en la URL en lugar de http://. También es posible encriptar la comunicación usando el protocolo wss://, el cual usará el puerto 443 (el mismo que HTTPS).
 En el cliente usaremos JavaScript para interactuar con los WebSockets en la página web y del lado del servidor se puede usar una variedad de lenguajes de programación, entre los cuales están JavaScript (usado tras bambalinas por Node-Red, la tecnología que usaremos en este ejercicio) o Java (a partir de JEE 7).
 
-### Posibles problemas###
+### Posibles problemas
 Sin embargo, a pesar de las precauciones que tomaron los desarrolladores del estándar, es posible encontrarnos con problemas porque los administradores de los firewalls y/o de los sistemas de detección o prevención de intrusos (IDS/IPS) pueden haber decidido bloquear el uso de websockets. ¿Porqué iban a querer hacer eso? Es un tema de seguridad. Si bien los websockets no representan una amenaza especial, son una forma adicional de poder comunicarse con el exterior. En una época en la que la mayoría de las amenazas provienen de lo que se conoce como Advanced Persistance Threats (APT), programas que se ejecutan dentro de la red de las víctimas y que intentan recabar el máximo de información para enviarla de forma discreta al exterior donde los hackers la están esperando, un canal más de comunicaciones que se debe monitorear siempre es visto con recelo por parte de los responsables de seguridad.
 
 Por ese motivo, considerando que es probable que algunos usuarios no podrán usar websockets para comunicarse con el servidor, es recomendable detectar una posible falla de conexión para al menos avisar del problema o mejor aún, dar a los usuarios de la aplicación web una alternativa, usando otra tecnología como XMLHttpRequest que no tiene el riesgo de estar bloqueada.
 Pueden probar fácilmente si este ejercicio va a funcionar en su máquina, conectándose a la página https://www.websocket.org/echo.html
  
-## ¿Cómo funcionan los WebsSockets?##
-### Modelo de programación###
+## ¿Cómo funcionan los WebsSockets?
+### Modelo de programación
 Los WebSockets son muy fáciles de utilizar, tal y como veremos a continuación. En realidad solo debemos conocer dos grupos de funciones. Por un lado están aquellas con las que vamos a administrar el ciclo de vida del objeto y por el otro, los callbacks o sea las funciones que el browser va a mandar invocar cuando detecte un evento relacionado con el websocket.
 
-### El ciclo de vida de los websockets###
+### El ciclo de vida de los websockets
 El primer paso consiste en crear el WebSocket, normalmente al terminar de cargarse la página, dentro de la función onload() del objeto window.
+```
       var socket = new WebSocket(‘ws://www.example.com/socketserver');
+```
 Podrá observar que lo único que necesitamos pasar como argumento es el url al que nos vamos a conectar. Cuando trabajemos en nuestro ejemplo sobre Bluemix, el url se dividirá en dos partes, el url de nuestro servidor (por ejemplo “Node-RED-prueba1.mybluemix.net”) y la ruta que definiremos para el websocket (por ejemplo “/ws/misocket”).
 Por motivos de seguridad, la especificación obliga que los navegadores solo puedan abrir un websocket. La idea es evitar posibles ataques de tipo DoS (Negación de Servicio) desde un browser. A pesar de ello, no todos los navegadores han implementado esta limitación. Sin
   
