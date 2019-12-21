@@ -31,7 +31,9 @@ Sin embargo, a pesar de las precauciones que tomaron los desarrolladores del est
 
 Por ese motivo, considerando que es probable que algunos usuarios no podrán usar websockets para comunicarse con el servidor, es recomendable detectar una posible falla de conexión para al menos avisar del problema o mejor aún, dar a los usuarios de la aplicación web una alternativa, usando otra tecnología como XMLHttpRequest que no tiene el riesgo de estar bloqueada.
 Pueden probar fácilmente si este ejercicio va a funcionar en su máquina, conectándose a la página https://www.websocket.org/echo.html
- 
+
+[[https://github.com/huibert7/Node-Red-tutorial/blob/master/Documentation/Images/1. Echo Test.png|alt=MAE]]
+
 ## ¿Cómo funcionan los WebsSockets?
 ### Modelo de programación
 Los WebSockets son muy fáciles de utilizar, tal y como veremos a continuación. En realidad solo debemos conocer dos grupos de funciones. Por un lado están aquellas con las que vamos a administrar el ciclo de vida del objeto y por el otro, los callbacks o sea las funciones que el browser va a mandar invocar cuando detecte un evento relacionado con el websocket.
