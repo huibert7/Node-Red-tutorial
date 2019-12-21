@@ -32,7 +32,7 @@ Sin embargo, a pesar de las precauciones que tomaron los desarrolladores del est
 Por ese motivo, considerando que es probable que algunos usuarios no podrán usar websockets para comunicarse con el servidor, es recomendable detectar una posible falla de conexión para al menos avisar del problema o mejor aún, dar a los usuarios de la aplicación web una alternativa, usando otra tecnología como XMLHttpRequest que no tiene el riesgo de estar bloqueada.
 Pueden probar fácilmente si este ejercicio va a funcionar en su máquina, conectándose a la página https://www.websocket.org/echo.html
 
-[[https://github.com/huibert7/Node-Red-tutorial/blob/master/Documentation/Images/1 Echo Test.png|alt=Echo Test]]
+[["https://github.com/huibert7/Node-Red-tutorial/blob/master/Documentation/Images/1 Echo Test.png"|alt="Echo Test"]]
 
 ## ¿Cómo funcionan los WebsSockets?
 ### Modelo de programación
